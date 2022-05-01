@@ -11,10 +11,25 @@
         <h1>Iniciar Sesión</h1>
         <form action="/login" method="post">
             <div>
-                <input type="mail" name="mail" placeholder="Email o usuario">
+                <input type="email" name="email" placeholder="Email o usuario">
+                <% if (locals.errors && errors.email) { %>
+                    <div><%=errors.email.msg%></div>
+                <% } %>
             </div>
             <div>
                 <input type="password" name="password" placeholder="Contraseña">
+                <% if (locals.errors && errors.custom) { %>
+                    <div><%=errors.custom.msg%></div>
+                <% } %>
+            </div>
+            <div>
+                <label>
+                    Recordarme
+                    <input type="checkbox" name="remember">
+                </label>
+            </div>
+            <div>
+                <input type="submit" value="Ingresar">
             </div>
         </form>
     </main>

@@ -5,11 +5,12 @@ const router = express.Router();
 const usersControllers = require("../controllers/usersControllers");
 
 //validations
-const registerValidator =require("../validations/registerValidator")
+const registerValidator =require("../validations/registerValidator");
+const loginValidator = require("../validations/loginValidator");
 
 router.get("/login", usersControllers.login);
 
-router.post("/login", usersControllers.processLogin);
+router.post("/login", loginValidator ,usersControllers.processLogin);
 
 router.get("/register", usersControllers.register);
 
