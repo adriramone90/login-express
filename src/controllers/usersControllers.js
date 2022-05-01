@@ -1,5 +1,8 @@
 const {getUsers, saveUsers} = require("../data/index");
 
+const {validationResult} = require("express-validator");
+const bcrypt = require("bcryptjs")
+
 module.exports = {
     login: (req,res)=>{
         res.render("users/login")
@@ -15,27 +18,39 @@ module.exports = {
 
     processRegister: (req, res)=>{
         
-        let lastId = 0;
+        errors = validationResult(req);
 
-        getUsers.forEach(user => {
-            if(user.id > lastId){
-                lastId = user.id
+        if(errors.isEmpty()){
+            let lastId = 0;
+
+            getUsers.forEach(user => {
+                if(user.id > lastId){
+                    lastId = user.id
+                }
+            });
+
+            let newUser = {
+                name: req.body.name,
+                surname: req.body.surname,
+                email: req.body.email,
+                password: bcrypt.hashSync(req.body.password,12),
+                avatar: req.file ? req.file.filename : "default.png"
             }
-        });
 
-        let newUser = {
-            name: req.body.name,
-            surname: req.body.surname,
-            email: req.body.email,
-            password: req.body.password,
-            avatar: req.file ? req.file.filename : "default.png"
+            getUsers.push(newUser)
+
+            saveUsers(getUsers)
+
+            res.redirect("/login")
+        } else {
+            res.render("users/register",{
+                errors: errors.mapped(),
+                old:req.body
+            })
         }
 
-        getUsers.push(newUser)
 
-        saveUsers(getUsers)
-
-        res.redirect("/login")
+        
 
     },
 

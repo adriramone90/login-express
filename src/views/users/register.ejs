@@ -12,26 +12,48 @@
         <h1>Registrarme</h1>
         <form action="/register" method="POST">
             <div>
-                <input type="text" name="name" placeholder="Nombre">
+                <input type="text" name="name" placeholder="Nombre" value="<%= (locals.old && old.name) ? old.name : ""%>">
+                <% if (locals.errors && errors.name) { %>
+                    <div><%=errors.name.msg%></div>
+                <% } %>
             </div>
             
             <div>
-                <input type="text" name="surname" placeholder="Apellido">
+                <input type="text" name="surname" placeholder="Apellido" value="<%= (locals.old && old.surname) ? old.surname : ""%>">
+                <% if (locals.errors && errors.surname) { %>
+                    <div><%=errors.surname.msg%></div>
+                <% } %>
             </div>
             <div>
-                <input type="mail" name="mail" placeholder="Email">
-                <div>mensaje de error</div>
+                <input type="mail" name="email" placeholder="Email" value="<%= (locals.old && old.email) ? old.email : ""%>">
+                <% if (locals.errors && errors.email) { %>
+                    <div><%=errors.email.msg%></div>
+                <% } %>
             </div>
             <div>
                 <input type="password" name="password" placeholder="Contraseña">
-                <div>mensaje de error</div>
+                <% if (locals.errors && errors.password) { %>
+                    <div><%=errors.password.msg%></div>
+                <% } %>
             </div>
 
             <div>
                 <input type="password" name="password2" placeholder="Reingrese la contraseña">
-                <div>mensaje de error</div>
+                <% if (locals.errors && errors.password2) { %>
+                    <div><%=errors.password2.msg%></div>
+                <% } %>
             </div>
 
+            <div>
+                <label>
+                    Términos y condiciones
+                    <input type="checkbox" name="terms">
+                </label>
+                <% if (locals.errors && errors.terms) { %>
+                    <div><%=errors.terms.msg%></div>
+                <% } %>
+            </div>
+            
             <div>
                 <input type="submit" value="Registrame">
             </div>
