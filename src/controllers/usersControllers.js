@@ -1,7 +1,9 @@
 const {getUsers, saveUsers} = require("../data/index");
 
 const {validationResult} = require("express-validator");
-const bcrypt = require("bcryptjs")
+const bcrypt = require("bcryptjs");
+const req = require("express/lib/request");
+const { get } = require("express/lib/response");
 
 module.exports = {
     login: (req,res)=>{
@@ -27,7 +29,8 @@ module.exports = {
                 name: user.name,
                 email: user.email,
                 avatar: user.avatar,
-                surname: user.surname
+                surname: user.surname,
+                
             }
             
 
@@ -81,7 +84,7 @@ module.exports = {
                 surname: req.body.surname,
                 email: req.body.email,
                 password: bcrypt.hashSync(req.body.password,12),
-                avatar: req.file ? req.file.filename : "default.png"
+                avatar: req.file ? req.file.filename : "default.jpg"
             }
 
             getUsers.push(newUser)
@@ -100,16 +103,69 @@ module.exports = {
 
     },
 
+    logout:(req,res)=>{
+        req.session.destroy();
+
+        if(req.cookies.userLogin){
+            res.cookie("userLogin","",{
+                maxAge: -1
+            })
+        }
+
+        res.redirect("/")
+    },
+
     profile:(req,res)=>{
-        //vista perfil
+        let user = getUsers.find(user => user.email === req.session.user.email)
+
+        res.render("users/profile",{
+            titulo:"Registrarme",
+            session:req.session,
+            user:user
+        })
     },
 
     processProfile: (req,res)=>{
-        //modificar perfil
+
+
+        getUsers.forEach(user => {
+            if(user.email === req.session.user.email){
+                user.name = req.body.name ? req.body.name : user.name
+                user.surname = req.body.surname ? req.body.surname : user.surname
+                user.birthday = req.body.birthday
+                user.password = req.body.password ? bcrypt.hashSync(req.body.password,12) : user.password
+                user.avatar = req.file ? req.file.filename : "default.jpg"
+            }
+        })
+
+        saveUsers(getUsers)
+
+        res.redirect("/")
     },
 
     deleteUser:(req,res)=>{
+        let locateUser = getUsers.find(user => user.email === req.session.user.email)
 
+
+        getUsers.forEach(user => {
+            if(user.id === locateUser.id){
+
+                userDelete = getUsers.indexOf(user)
+
+                getUsers.splice(userDelete, 1)
+            }
+        })
+
+        saveUsers(getUsers)
+
+        req.session.destroy();
+        if(req.cookies.userLogin){
+            res.cookie("userLogin","",{
+                maxAge: -1
+            })
+        }
+
+        res.redirect("/")
     }
 
 

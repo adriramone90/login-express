@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi perfil</title>
+</head>
+<body>
+    <h1>Mi perfil</h1>
+        <form action="/profile?_method=PUT" method="POST" enctype="multipart/form-data">
+            <div>
+                <input type="text" name="name" placeholder="Nombre" value="<%=user.name%>">
+                <% if (locals.errors && errors.name) { %>
+                    <div><%=errors.name.msg%></div>
+                <% } %>
+            </div>
+            
+            <div>
+                <input type="text" name="surname" placeholder="Apellido" value="<%=user.surname%>">
+                <% if (locals.errors && errors.surname) { %>
+                    <div><%=errors.surname.msg%></div>
+                <% } %>
+            </div>
+            <div>
+                <input type="mail" name="email" placeholder="Email" value="<%=user.email%>">
+                <% if (locals.errors && errors.email) { %>
+                    <div><%=errors.email.msg%></div>
+                <% } %>
+            </div>
+
+            <div>
+                <input type="password" name="password" placeholder="Nueva Contraseña">
+                <% if (locals.errors && errors.password) { %>
+                    <div><%=errors.password.msg%></div>
+                <% } %>
+            </div>
+
+            <div>
+                <input type="password" name="password2" placeholder="Reingrese la contraseña">
+                <% if (locals.errors && errors.password2) { %>
+                    <div><%=errors.password2.msg%></div>
+                <% } %>
+            </div>
+
+            <div>
+                <label>
+                    Fecha de nacimiento
+                    <input type="date" name="birthday" id="birthday">
+                </label>
+            </div>
+
+            <div>
+                <div>
+                    <img src="img/users/<%=user.avatar%>" alt="">
+                </div>
+                <label>
+                    Foto de perfil
+                    <input type="file" name="avatar" id="avatar">
+                </label>
+            </div>
+            
+            <div>
+                <input type="submit" value="Guardar">
+            </div>
+        </form>
+</body>
+</html>

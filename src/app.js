@@ -9,6 +9,7 @@ const path = require("path");
 const methodOverride = require("method-override");
 const session = require("express-session");
 const cookieParser = require("cookie-parser");
+const reloginCookie =require("./middlewares/reloginCookie")
 
 //Routes
 const indexRouter = require("./routes/indexRouter");
@@ -26,6 +27,7 @@ app.use(session({
     cookie:{}
 }));
 app.use(cookieParser())
+app.use(reloginCookie)
 
 //Config ejs
 app.set("view engine", "ejs");

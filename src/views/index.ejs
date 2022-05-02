@@ -8,7 +8,16 @@
 </head>
 <body>
     <h1>Soy el home!</h1>
-    <a href="/login">Log In</a>
-    <a href="/register">Register</a>
+    <% if (session.user) { %>
+        <h2>Bienvenido <%=session.user.name%></h2>
+        <a href="/profile">Mi perfil</a>
+        <a href="/logout">Cerrar sesión</a>
+        <form action="/delete?_method=DELETE" method="post">
+            <input type="submit" value="eliminar mi cuenta">
+        </form>
+    <% } else { %>
+        <a href="/login">Iniciar Sesión</a>
+        <a href="/register">Registrarse</a>
+    <% } %> 
 </body>
 </html>
