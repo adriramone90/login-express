@@ -127,20 +127,36 @@ module.exports = {
 
     processProfile: (req,res)=>{
 
+        let errors = validationResult(req)
 
-        getUsers.forEach(user => {
-            if(user.email === req.session.user.email){
-                user.name = req.body.name ? req.body.name : user.name
-                user.surname = req.body.surname ? req.body.surname : user.surname
-                user.birthday = req.body.birthday
-                user.password = req.body.password ? bcrypt.hashSync(req.body.password,12) : user.password
-                user.avatar = req.file ? req.file.filename : "default.jpg"
-            }
-        })
+        if(errors.isEmpty()){
 
-        saveUsers(getUsers)
+            getUsers.forEach(user => {
+                if(user.email === req.session.user.email){
+                    user.name = req.body.name ? req.body.name : user.name
+                    user.surname = req.body.surname ? req.body.surname : user.surname
+                    user.birthday = req.body.birthday
+                    user.password = req.body.password ? bcrypt.hashSync(req.body.password,12) : user.password
+                    user.avatar = req.file ? req.file.filename : user.avatar
+                }
+            })
+    
+            saveUsers(getUsers)
+    
+            res.redirect("/")
+        } else{
 
-        res.redirect("/")
+            let user = getUsers.find(user => user.email === req.session.user.email)
+
+            res.render("users/profile",{
+                titulo:"Registrarme",
+                session:req.session,
+                user:user,
+                errors:errors.mapped()
+            })
+        }
+
+        
     },
 
     deleteUser:(req,res)=>{

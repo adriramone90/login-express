@@ -58,6 +58,9 @@
                     Foto de perfil
                     <input type="file" name="avatar" id="avatar">
                 </label>
+                <% if (locals.errors && errors.avatar) { %>
+                    <div><%=errors.avatar.msg%></div>
+                <% } %>
             </div>
             
             <div>
